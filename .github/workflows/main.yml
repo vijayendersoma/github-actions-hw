@@ -1,0 +1,29 @@
+name: CI
+on:
+   push:
+     branches:
+       - main
+ 
+jobs:
+    
+   build:
+    # Allow the job to fetch a GitHub ID token
+     permissions:
+       id-token: write
+       contents: read
+     runs-on: ubuntu-latest
+     environment: dev
+     
+     steps:
+       - name: Get Your Code
+         uses: actions/checkout@v3
+
+       - name: Say Hello to the World
+         run: echo "Hello World!, ${{ vars.SAMPLE_CONFIG_VAL }}"
+       - id: 'auth'
+         name: 'Authenticate to Google Cloud'
+         uses: 'google-github-actions/auth@v1'
+         with:
+           create_credentials_file: true
+           workload_identity_provider: '${{ vars.WIF_PROVIDER }}'
+           service_account: '${{ vars.WIF_SERVICE_ACCOUNT }}' 
